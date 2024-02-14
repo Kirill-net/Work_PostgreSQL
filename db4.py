@@ -90,7 +90,7 @@ client1 = ('Ivan', 'Nicolaev', 'Ivan123@mail.ru')
 client2 = ('Konstantin', 'Sidorov', 'ks@mail.ru')
 client3 = ('Roman', 'Kochalov', 'ksfff@mail.ru')
 
-with psycopg2.connect(database='netology_db', user='postgres', password='admin') as conn:
+with psycopg2.connect(database='netology_db', user='postgres', password='***') as conn:
      create_db(conn)
      add_client(conn,'Ivan', 'Nicolaev', 'Ivan123@mail.ru', 456456)
      add_client(conn, 'Konstantin', 'Sidorov', 'ks@mail.ru', 988776)
