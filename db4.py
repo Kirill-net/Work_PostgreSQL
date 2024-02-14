@@ -73,13 +73,15 @@ def delete_client(conn, client_id):              # удаляет клиента
         conn.commit()
 
 def find_client(conn, first_name=None, last_name=None, email=None, phones=None):                # поиск клиента
-    data = {'first_name': first_name, 'last_name': last_name, 'email': email, 'phone': phones}
+    data = {'first_name': first_name, 'last_name': last_name, 'email': email, 'phones': phones}
     with conn.cursor() as cur:
         cur.execute(f"""
                 SELECT * FROM clients c
                 JOIN phone_number p ON c.id = p.client_id
                 WHERE (first_name=%(first_name)s IS NULL OR first_name=%(first_name)s) 
                 AND (last_name=%(last_name)s IS NULL OR last_name=%(last_name)s)
+                AND (email=%(email)s IS NULL OR email=%(email)s)
+                AND (phones=%(phones)s IS NULL OR phones=%(phones)s)
                 """, data)
         print(cur.fetchone())
 
