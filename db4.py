@@ -42,28 +42,19 @@ def add_client(conn, first_name, last_name, email, phones=None):    # добав
         if phones !=None:
             client_id = search(conn, first_name, last_name)
             add_phone(conn, client_id, phones)
-def change_client(conn, client_id, first_name=None, last_name=None, email=None, phones=None):
-    with conn.cursor() as cur:                                      # вносит изменения в данные клиента 
-        if first_name != None:
-            cur.execute("""
-                 UPDATE clients SET first_name=%s
-                 WHERE id=%s;
-                 """, (first_name, client_id))
-        if last_name != None:
-            cur.execute("""
-                 UPDATE clients SET last_name=%s
-                 WHERE id=%s;
-                 """, (last_name, client_id))
-        if email != None:
-            cur.execute("""
-                 UPDATE clients SET email=%s
-                 WHERE id=%s;
-                 """, (email, client_id))
+def change_client(conn, client_id, first_name=None, last_name=None, email=None, phones=None):  # меняем данные
+    data = {'first_name': first_name, 'last_name': last_name, 'email': email}
+    with conn.cursor() as cur:
+        for key, arg in data.items():
+            if arg != None:
+                cur.execute("""
+                    UPDATE clients SET {}=%s WHERE id=%s""".format(key), (arg, client_id))
         if phones != None:
             cur.execute("""
-                 UPDATE phone_number SET number=%s
-                 WHERE client_id=%s;
-                 """, (phones, client_id))
+                    UPDATE phone_number SET number=%s
+                    WHERE client_id=%s;
+                    """, (phones, client_id))
+
 def delete_phone(conn, client_id, phones):           # удаляет телефон (конкретный)
     with conn.cursor() as cur:
         cur.execute("""
@@ -106,5 +97,7 @@ with psycopg2.connect(database='netology_db', user='postgres', password='admin')
 #     delete_client(conn, 1)
      find_client(conn, 'Ivan', None)
 
+     change_client(conn, 1, None, 'Nic')
+     find_client(conn, 'Ivan', None)
 
 conn.close()
